@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.models.reason import ReasonRequest, ReasonResponse,ReasonResponseStatus
+from app.models.reason import ReasonRequest, ReasonResponse
 from app.services.openrouter import call_openrouter
 
 router = APIRouter()
@@ -12,6 +12,6 @@ async def welcome():
 @router.post("/reason", response_model=ReasonResponse)
 async def reason(request: ReasonRequest):
     
-    result = call_openrouter(request.api_key, request.model, request.messages)
+    result = call_openrouter(params=request)
 
-    return ReasonResponse(error="0",reasoning="",response=result,status=ReasonResponseStatus.completed)
+    return result
