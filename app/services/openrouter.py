@@ -24,7 +24,7 @@ async def call_openrouter(params:ReasonRequest) -> ReasonResponse:
         )
         response_content = completion.choices[0].message.content or ""
         return ReasonResponse(
-            reasoning="OpenRouter call successful",
+            reasoning="",
             response=response_content,
             error="",
             status=ReasonResponseStatus.completed
@@ -36,3 +36,9 @@ async def call_openrouter(params:ReasonRequest) -> ReasonResponse:
             error=str(e),
             status=ReasonResponseStatus.failed
         )
+    
+
+
+
+
+
