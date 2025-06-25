@@ -1,13 +1,13 @@
 # Placeholder for OpenRouter integration logic
 
 from typing import List, cast
-from openai import OpenAI
+from openai import AsyncOpenAI
 from openai.types.chat import ChatCompletionMessageParam
 from app.models.reason import ReasonRequest,ReasonResponse,ReasonResponseStatus
 
-def call_openrouter(params:ReasonRequest) -> ReasonResponse:
+async def call_openrouter(params:ReasonRequest) -> ReasonResponse:
 
-    client = OpenAI(
+    client = AsyncOpenAI(
         base_url="https://openrouter.ai/api/v1",
         api_key=params.api_key,
     )
@@ -18,7 +18,7 @@ def call_openrouter(params:ReasonRequest) -> ReasonResponse:
     ]
 
     try:
-        completion = client.chat.completions.create(
+        completion = await client.chat.completions.create(
             model=params.model,
             messages=messagesToPass
         )

@@ -12,6 +12,6 @@ async def welcome():
 @router.post("/reason", response_model=ReasonResponse)
 async def reason(request: ReasonRequest):
     
-    result = call_openrouter(params=request)
+    result = await call_openrouter(params=request)
 
     return result
