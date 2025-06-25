@@ -16,6 +16,13 @@ class ReasonResponse(BaseModel):
 
 app = FastAPI()
 
+
+@app.get("/")
+async def welcome():
+    return ReasonResponse(result="Welcome from ThinkFast!, POST properly to start using the API")
+
+
 @app.post("/reason", response_model=ReasonResponse)
 async def reason(request: ReasonRequest):
     return ReasonResponse(result="This will be end result after fetching from OpenRouter")
+
