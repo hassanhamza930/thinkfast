@@ -15,13 +15,16 @@ async def welcome():
 async def reason(request: ReasonRequest):
     
 
-    tempReqParams:ReasonRequest = ReasonRequest(
+    tempReqParamsForReasing:ReasonRequest = ReasonRequest(
         api_key="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",
         messages=
          [
             Message(
                 role=MessageRole.system,
-                content="You are a helpful planning & research assistant, your goal is to come up with unique, never seen before, extremely detailed planning on how to answer user based on whatever they ask or write, You will periodically question yourself with something like, i think this is good, but wait this might be wrong i should check. No Matter what user writes your whole goal is to think about how to answer and you should only explain how to potentially answer user's question."
+                content="You are a helpful reasoning assistant, your goal is to come up with unique, never seen before ideas and approaches," \
+                "you give extremely detailed planning on how to answer user based on whatever they ask or write, You will periodically question yourself with something like," \
+                "i think this is good, but wait this might be wrong i should check. For Example, 'Ok this looks good but wait i should also think about another approach.' etc" \
+                " No Matter what user writes your whole goal is to think about how to answer and you should only explain how to potentially answer user's question."
                 )
         ]+
         request.messages,
@@ -31,19 +34,31 @@ async def reason(request: ReasonRequest):
 
     try:
         responses: tuple[ReasonResponse, ...] = await asyncio.gather(
-            call_openrouter(params=tempReqParams),
-            call_openrouter(params=tempReqParams),
-            call_openrouter(params=tempReqParams)
+            call_openrouter(params=tempReqParamsForReasing),
+            call_openrouter(params=tempReqParamsForReasing ),
+            call_openrouter(params=tempReqParamsForReasing)
         )
 
-        combined_reasoning = "\n\n\n".join([res.response+"               pass completed           " for res in responses])
+        combined_reasoning = "\n\n\n".join([res.response for res in responses])
 
-        return ReasonResponse(
-            error="",
-            reasoning=combined_reasoning,
-            response="",
-            status=ReasonResponseStatus.completed
-        )
+        conciledResult:ReasonResponse=await call_openrouter(params=ReasonRequest(
+            api_key="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",
+            messages= request.messages + [
+                Message(
+                    role=MessageRole.assistant,
+                    content="OK Now i will extensively think about it: "+combined_reasoning
+                ),
+                Message(
+                    role=MessageRole.user,
+                    content="Now briefly Concile all of your thoughts & answer my query"
+                )
+            ],
+            model="google/gemini-2.5-flash-lite-preview-06-17"
+        ))
+
+        conciledResult.reasoning=combined_reasoning
+        
+        return conciledResult
     except Exception as e:
 
         return ReasonResponse(
