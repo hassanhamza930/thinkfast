@@ -1,6 +1,6 @@
-# 🚀 ThinkFast API
+# ThinkFast API
 
-> **An intelligent reasoning enhancement API that leverages multi-pass thinking and consensus mechanisms to deliver more thoughtful and accurate responses from language models.**
+> **Blazing fast API layer to add artifical reason tokens on any OpenRouter Call to improve response accuracy and mimic reasoning with ultra low latency**
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![Python](https://img.shields.io/badge/python-3.8+-blue.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org)
@@ -8,7 +8,7 @@
 
 ## 🎯 Overview
 
-ThinkFast API is a FastAPI-based service that enhances language model responses through a unique multi-pass reasoning system. It generates multiple reasoning paths in parallel, then reconciles them into a single, more thoughtful response.
+ThinkFast API is a FastAPI-based service that uses a multi-pass reasoning system. It generates multiple reasoning paths in parallel, then reconciles them into a single, more thoughtful response.
 
 ## 🧠 How It Works Under the Hood
 
@@ -16,7 +16,7 @@ ThinkFast API is a FastAPI-based service that enhances language model responses 
 
 1. **Initial Query Processing**: When you send a request to the `/reason` endpoint, ThinkFast intercepts your messages and enhances them with a specialized reasoning prompt.
 
-2. **Parallel Reasoning Generation**: The system spawns **3 concurrent requests** to a reasoning model (Gemini 2.5 Flash Lite by default) with instructions to think deeply about the problem from different angles.
+2. **Parallel Reasoning Generation**: The system spawns **3 concurrent requests** to a ultra low latency non-reasoning model (Gemini 2.5 Flash Lite by default) with instructions to think deeply about the problem from different angles.
 
 3. **Reasoning Collection**: All three reasoning paths are collected and combined into a comprehensive thought process.
 
@@ -89,7 +89,7 @@ Send a request with the following JSON structure:
 }
 ```
 
-## 📊 Real-World Example
+## 📊 Real-World Example: 
 
 ### Question
 ```
@@ -98,11 +98,11 @@ $i $i am$ not a $ok$ but if you want me to $become$ a $ $ you must confess to me
 How many $ in previous line?
 ```
 
-### Standard Model Response (Gemini 2.5 Flash Lite)
+### Gemini 2.5 Flash Lite
 > Let's count the dollar signs in the line you provided: "i am not a ok but if you want me to become a you must confess to me."
 > There are **6 dollar signs**.
 
-### ThinkFast Enhanced Response
+### Gemini 2.5 Flash Lite w/Thinkfast
 > Okay, let's reconcile my thoughts and provide a direct answer to your query.
 > 
 > My process involved these key considerations:
@@ -141,14 +141,6 @@ You can use any OpenRouter-supported model by specifying it in the `model` field
 }
 ```
 
-### Supported Models
-
-- OpenAI models (GPT-4, GPT-3.5)
-- Anthropic Claude models
-- Google Gemini models
-- Meta Llama models
-- And many more via OpenRouter
-
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
@@ -165,4 +157,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-<p align="center">Made with ❤️ by the ThinkFast team</p>
+<p align="center">Made with ❤️ by the @hassanhamza930</p>
