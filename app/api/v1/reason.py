@@ -16,7 +16,7 @@ async def reason(request: ReasonRequest):
     
 
     tempReqParamsForReasing:ReasonRequest = ReasonRequest(
-        api_key="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",
+        api_key=request.api_key,
         messages=
          [
             Message(
@@ -42,7 +42,7 @@ async def reason(request: ReasonRequest):
         combined_reasoning = "\n\n\n".join([res.response for res in responses])
 
         conciledResult:ReasonResponse=await call_openrouter(params=ReasonRequest(
-            api_key="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",
+            api_key=request.api_key,
             messages= request.messages + [
                 Message(
                     role=MessageRole.assistant,
@@ -53,7 +53,7 @@ async def reason(request: ReasonRequest):
                     content="Now briefly Concile all of your thoughts & answer my query"
                 )
             ],
-            model="google/gemini-2.5-flash-lite-preview-06-17"
+            model=request.model
         ))
 
         conciledResult.reasoning=combined_reasoning
