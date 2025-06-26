@@ -42,7 +42,7 @@ This approach mimics how humans think through complex problems - considering mul
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/thinkfast.git
+   git clone https://github.com/hassanhamza930/thinkfast.git
    cd thinkfast
    ```
 
