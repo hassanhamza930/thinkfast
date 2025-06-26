@@ -17,25 +17,16 @@ async def call_openrouter(params:ReasonRequest) -> ReasonResponse:
         for m in params.messages
     ]
 
-    try:
-        completion = await client.chat.completions.create(
-            model=params.model,
-            messages=messagesToPass
-        )
-        response_content = completion.choices[0].message.content or ""
-        return ReasonResponse(
-            reasoning="",
-            response=response_content,
-            error="",
-            status=ReasonResponseStatus.completed
-        )
-    except Exception as e:
-        return ReasonResponse(
-            reasoning="",
-            response="",
-            error=str(e),
-            status=ReasonResponseStatus.failed
-        )
+    completion = await client.chat.completions.create(
+        model=params.model,
+        messages=messagesToPass
+    )
+    response_content = completion.choices[0].message.content or ""
+    return ReasonResponse(
+        reasoning="",
+        response=response_content,
+        status=ReasonResponseStatus.completed
+    )
     
 
 

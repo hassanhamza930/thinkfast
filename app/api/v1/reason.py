@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, status as http_status
 from app.models.reason import ReasonRequest, ReasonResponse,ReasonResponseStatus
 from app.services.openrouter import call_openrouter
 from app.models.message import Message,MessageRole
@@ -35,18 +35,23 @@ async def reason(request: ReasonRequest):
     try:
         responses: tuple[ReasonResponse, ...] = await asyncio.gather(
             call_openrouter(params=tempReqParamsForReasing),
-            call_openrouter(params=tempReqParamsForReasing ),
+            call_openrouter(params=tempReqParamsForReasing),
             call_openrouter(params=tempReqParamsForReasing)
         )
+    except Exception as e:
+        raise HTTPException(
+            status_code=http_status.HTTP_502_BAD_GATEWAY,
+            detail=f"Upstream OpenRouter error: {str(e)}"
+        )
 
-        combined_reasoning = "\n\n\n".join([res.response for res in responses])
-
-        conciledResult:ReasonResponse=await call_openrouter(params=ReasonRequest(
+    combined_reasoning = "\n\n\n".join([res.response for res in responses])
+    try:
+        conciledResult: ReasonResponse = await call_openrouter(params=ReasonRequest(
             api_key=request.api_key,
-            messages= request.messages + [
+            messages=request.messages + [
                 Message(
                     role=MessageRole.assistant,
-                    content="OK Now i will extensively think about it: "+combined_reasoning
+                    content="OK Now i will extensively think about it: " + combined_reasoning
                 ),
                 Message(
                     role=MessageRole.user,
@@ -55,15 +60,11 @@ async def reason(request: ReasonRequest):
             ],
             model=request.model
         ))
-
-        conciledResult.reasoning=combined_reasoning
-        
-        return conciledResult
     except Exception as e:
+        raise HTTPException(
+            status_code=http_status.HTTP_502_BAD_GATEWAY,
+            detail=f"Upstream OpenRouter error during reconciliation: {str(e)}"
+        )
 
-        return ReasonResponse(
-            error=str(e),
-            response="Query Failed",
-            reasoning="No Reasoning Tokens",
-            status=ReasonResponseStatus.failed
-    )
+    conciledResult.reasoning = combined_reasoning
+    return conciledResult

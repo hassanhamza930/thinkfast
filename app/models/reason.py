@@ -15,7 +15,6 @@ class ReasonRequest(BaseModel):
     messages: List[Message] = Field(..., description="Messages Array with ")
 
 class ReasonResponse(BaseModel):
-    reasoning:str = Field(..., description="Reasoning Tokens")
+    reasoning: str = Field(..., description="Reasoning Tokens")
     response: str = Field(..., description="Actual Response")
-    error:str = Field(..., description="Error During Reasoning Request")
-    status:ReasonResponseStatus = Field(..., description="Status of Reasoning Request")
+    status: ReasonResponseStatus = Field(..., description="Status of Reasoning Request")
